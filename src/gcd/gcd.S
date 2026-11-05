@@ -56,8 +56,9 @@ gcd_u32_asm:
     mv      a1, t2
 
 .Lgcd_subtract:
+    # Both operands are odd; a nonzero difference is even.
     sub     a1, a1, a0
-    bnez    a1, .Lgcd_strip_b
+    bnez    a1, .Lgcd_shift_b
 
     # Restore the common power of two.
     sll     a0, a0, t0
