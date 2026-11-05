@@ -42,8 +42,11 @@ gcd_u32_asm:
     andi    t1, a1, 1
     bnez    t1, .Lgcd_order
 
+.Lgcd_shift_b:
+    # Test parity after shifting, avoiding an unconditional loop jump.
     srli    a1, a1, 1
-    j       .Lgcd_strip_b
+    andi    t1, a1, 1
+    beqz    t1, .Lgcd_shift_b
 
 .Lgcd_order:
     # Order unsigned operands before subtraction.
