@@ -25,11 +25,14 @@ bf16_from_f32_asm:
     li t0, 0x7f800000
     and t1, a0, t0
     beq t1, t0, .Lbf16_f32_high
-    srli t0, a0, 16
-    andi t0, t0, 1
-    li t1, 0x7fff
+
+    # Move the original retained low bit into the sign position.
+    slli t0, a0, 15
+    li t1, 0x8000
     add a0, a0, t1
-    add a0, a0, t0
+    bltz t0, .Lbf16_f32_high
+    addi a0, a0, -1
+
 .Lbf16_f32_high:
     srli a0, a0, 16
     ret
